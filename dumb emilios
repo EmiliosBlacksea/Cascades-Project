@@ -1,0 +1,13 @@
+python -m src.plot_results --metrics_dir reports/metrics --out_dir reports/plots ##ftiaxe plot excell
+
+python -m src.preprocess --input data/rawdata/weibo_dataset.txt --out_dir data/processed --ks 15 20 30 35 40 45 55 60 65 70 75 80 85 90 95 105 110 115 120 125 130 135 140 145 150 155 160 165 170 175 180 185 190 195 200
+
+python -m src.preprocess --input data/rawdata/weibo_dataset.txt --out_dir data/processed --ks (1..200)
+
+python -m src.laptop_stress_test --processed_dir data/processed --k_min 1 --k_max 200 --models logreg mlp --device cpu --skip_existing
+python -m src.laptop_stress_test --processed_dir data/processed --k_min 1 --k_max 200 --models logreg mlp --device cpu --skip_existing
+
+
+python -m src.run_experiments --processed_dir data/processed --ks 5 10 25 50 100
+
+python -c "import pandas as pd; df=pd.read_parquet('data/processed/features_k5.parquet'); print(df['label'].value_counts(dropna=False)); print('unique labels:', df['label'].unique())"
